@@ -52,19 +52,20 @@ contract Escrow is Ownable {
     }
 
     /// @notice Execute a buy.
-    function buy() public {
+    function buy(address receiver) public {
         uint256 amount = s_allocations[msg.sender].amount;
         require(amount > 0);
         uint256 price = s_allocations[msg.sender].price;
 
         delete s_allocations[msg.sender];
 
-        // Transfer token2 from buyer to this contract. Requires prior approval.
+        // Transfer token2 from buyer's sending address to this contract.
+        // Requires prior approval.
         require(s_token2.transferFrom(msg.sender, address(this), price));
         // Transfer token2 to owner.
         require(s_token2.transfer(owner(), price));
-        // Transfer token1 to buyer.
-        require(s_token1.transfer(msg.sender, amount));
+        // Transfer token1 to buyer's receiving address.
+        require(s_token1.transfer(receiver, amount));
     }
 
     /// @notice Reap all of a token deposited to this contract.
