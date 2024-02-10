@@ -59,11 +59,9 @@ contract Escrow is Ownable {
 
         delete s_allocations[msg.sender];
 
-        // Transfer token2 from buyer's sending address to this contract.
+        // Transfer token2 from buyer's sending address to owner.
         // Requires prior approval.
-        require(s_token2.transferFrom(msg.sender, address(this), price));
-        // Transfer token2 to owner.
-        require(s_token2.transfer(owner(), price));
+        require(s_token2.transferFrom(msg.sender, owner(), price));
         // Transfer token1 to buyer's receiving address.
         require(s_token1.transfer(receiver, amount));
     }
