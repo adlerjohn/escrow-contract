@@ -52,10 +52,11 @@ contract Escrow is Ownable {
     }
 
     /// @notice Execute a buy.
-    function buy(address receiver) public {
-        uint256 amount = s_allocations[msg.sender].amount;
+    function buy(address receiver, uint256 amount, uint256 price) public {
         require(amount > 0);
-        uint256 price = s_allocations[msg.sender].price;
+        Allocation memory allocation = s_allocations[msg.sender];
+        require(amount == allocation.amount);
+        require(price == allocation.price);
 
         delete s_allocations[msg.sender];
 
